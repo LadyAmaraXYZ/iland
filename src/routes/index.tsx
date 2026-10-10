@@ -31,7 +31,7 @@ function Board() {
         {[
           ["01", "Name the token", "Picture, ticker, a short note. It stays in this browser."],
           ["02", "Set the opening", "The desk writes the tick. Displayed cap is not STRK in the pool."],
-          ["03", "Wait for the hook", "No public launch until the first block is protected."],
+          ["03", "Twenty seconds", "The hook fee is 99% from initialize, then 1%. Written. Not deployed."],
         ].map(([n, title, body]) => (
           <li key={n} className="bg-bg px-4 py-4">
             <p className="font-mono text-sm text-accent">{n}</p>

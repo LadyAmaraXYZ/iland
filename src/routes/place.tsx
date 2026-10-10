@@ -38,7 +38,7 @@ const rows: { pads: string; machine: string; quote: string; when: string; here?:
     pads: "iLAND",
     machine: "One-sided Uniswap v4",
     quote: "Ethereum STRK only",
-    when: "The first block, once a hook is on",
+    when: "First block. 99% for 20 seconds, then 1%",
     here: true,
   },
 ];
@@ -92,12 +92,13 @@ function Place() {
             </p>
             <p>
               Clanker cuts the sniper with an auction of about 22 seconds. Stockereum holds the fee
-              at 99% for the first 20 seconds. Both of those are hooks. iLAND has neither yet, so
-              the pad stays closed. Without one, the first block belongs to bots.
+              at 99% for the first 20 seconds. iLAND uses that second window. The hook is written and
+              not deployed, so the pad stays closed.
             </p>
             <p>
-              On those two pads, part of the pool fee is paid to the creator. iLAND’s factory does
-              not. The 1% accrues to the locked position, and the locker cannot collect it.
+              On those two pads, part of the pool fee is paid to the creator. iLAND does not. The fee,
+              99% for the first 20 seconds and 1% after, accrues to the locked position. The locker
+              cannot collect it.
             </p>
           </Block>
 

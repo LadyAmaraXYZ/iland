@@ -2,8 +2,10 @@
 pragma solidity 0.8.26;
 
 /// @notice iLAND factory. One-sided Uniswap v4 pool against Ethereum STRK.
-///         The locker has no withdraw. This is not an anti-snipe hook.
-///         Not audited. Deploy from 0x6A41695dfF6a581390e115199Ef4322FC831B208.
+///         ILandSniperHook takes 99% for 20 seconds from initialize, then 1%.
+///         During those 20 seconds only the locker may add liquidity, and nobody may remove it.
+///         Not deployed. Not audited. Deploy the hook deployer first from
+///         0x6A41695dfF6a581390e115199Ef4322FC831B208.
 
 interface IERC20 {
     function balanceOf(address) external view returns (uint256);
@@ -33,6 +35,12 @@ struct ModifyLiquidityParams {
     int24 tickUpper;
     int256 liquidityDelta;
     bytes32 salt;
+}
+
+struct SwapParams {
+    bool zeroForOne;
+    int256 amountSpecified;
+    uint160 sqrtPriceLimitX96;
 }
 
 library TickMath {
@@ -214,9 +222,97 @@ contract ILandLocker {
     }
 }
 
+library HookFlags {
+    uint160 internal constant FLAGS = 0x1A80;
+}
+
+contract ILandSniperHook {
+    uint160 public constant FLAGS = HookFlags.FLAGS;
+    uint24 public constant OVERRIDE_FEE_FLAG = 0x400000;
+    uint24 public constant GUARD_FEE = 990_000;
+    uint24 public constant OPEN_FEE = 10_000;
+    uint256 public constant WINDOW = 20;
+    address public constant POOL_MANAGER = 0x000000000004444c5dc75cB358380D2e3dE08A90;
+
+    mapping(bytes32 id => uint256 openedAt) public openedAt;
+    mapping(bytes32 id => address initializer) public initializer;
+
+    error NotManager();
+    error Guarded();
+
+    modifier onlyManager() {
+        if (msg.sender != POOL_MANAGER) revert NotManager();
+        _;
+    }
+
+    function afterInitialize(address sender, PoolKey calldata key, uint160, int24) external onlyManager returns (bytes4) {
+        bytes32 id = _id(key);
+        if (openedAt[id] != 0) revert Guarded();
+        openedAt[id] = block.timestamp;
+        initializer[id] = sender;
+        return ILandSniperHook.afterInitialize.selector;
+    }
+
+    function beforeAddLiquidity(address sender, PoolKey calldata key, ModifyLiquidityParams calldata, bytes calldata)
+        external
+        view
+        onlyManager
+        returns (bytes4)
+    {
+        if (_guarded(key) && sender != _locker(initializer[_id(key)])) revert Guarded();
+        return ILandSniperHook.beforeAddLiquidity.selector;
+    }
+
+    function beforeRemoveLiquidity(address, PoolKey calldata key, ModifyLiquidityParams calldata, bytes calldata)
+        external
+        view
+        onlyManager
+        returns (bytes4)
+    {
+        if (_guarded(key)) revert Guarded();
+        return ILandSniperHook.beforeRemoveLiquidity.selector;
+    }
+
+    function beforeSwap(address, PoolKey calldata key, SwapParams calldata, bytes calldata)
+        external
+        view
+        onlyManager
+        returns (bytes4, int256, uint24)
+    {
+        uint24 fee = _guarded(key) ? GUARD_FEE : OPEN_FEE;
+        return (ILandSniperHook.beforeSwap.selector, 0, fee | OVERRIDE_FEE_FLAG);
+    }
+
+    function quoteFee(PoolKey calldata key) external view returns (uint24) {
+        return _guarded(key) ? GUARD_FEE : OPEN_FEE;
+    }
+
+    function _guarded(PoolKey calldata key) internal view returns (bool) {
+        uint256 opened = openedAt[_id(key)];
+        if (opened == 0) return true;
+        return block.timestamp < opened + WINDOW;
+    }
+
+    /// @dev The factory's first CREATE is the locker, so its nonce is 1.
+    function _locker(address factory) internal pure returns (address) {
+        return address(uint160(uint256(keccak256(abi.encodePacked(bytes1(0xd6), bytes1(0x94), factory, bytes1(0x01))))));
+    }
+
+    function _id(PoolKey calldata key) internal pure returns (bytes32) {
+        return keccak256(abi.encode(key));
+    }
+}
+
+contract ILandHookDeployer {
+    function deploy(bytes32 salt) external returns (address hook) {
+        hook = address(new ILandSniperHook{salt: salt}());
+    }
+}
+
 contract ILandFactory {
     uint256 public constant SUPPLY = 1_000_000_000 ether;
-    uint24 public constant FEE = 10_000;
+    /// @dev Dynamic-fee flag. The hook returns 990000 for 20 seconds, then 10000.
+    uint24 public constant FEE = 0x800000;
     int24 public constant SPACING = 200;
     int24 public constant MIN_TICK = -887200;
     int24 public constant MAX_TICK = 887200;
@@ -226,6 +322,7 @@ contract ILandFactory {
     address public constant POOL_MANAGER = 0x000000000004444c5dc75cB358380D2e3dE08A90;
 
     address public immutable owner;
+    address public immutable hook;
     ILandLocker public immutable locker;
     bool public publicLaunches;
 
@@ -244,9 +341,12 @@ contract ILandFactory {
     error NotAllowed();
     error Tick();
     error Liquidity();
+    error Hook();
 
-    constructor() {
+    constructor(address hook_) {
+        if (uint160(hook_) & 0x3FFF != HookFlags.FLAGS) revert Hook();
         owner = msg.sender;
+        hook = hook_;
         locker = new ILandLocker(POOL_MANAGER, STRK);
     }
 
@@ -278,7 +378,7 @@ contract ILandFactory {
             : _liq1(SUPPLY, sqrtLower, sqrtUpper);
         if (liquidity == 0) revert Liquidity();
 
-        PoolKey memory key = PoolKey(tokenIs0 ? token : STRK, tokenIs0 ? STRK : token, FEE, SPACING, address(0));
+        PoolKey memory key = PoolKey(tokenIs0 ? token : STRK, tokenIs0 ? STRK : token, FEE, SPACING, hook);
         IPoolManager(POOL_MANAGER).initialize(key, sqrtPrice);
         locker.provide(key, tickLower, tickUpper, liquidity);
 

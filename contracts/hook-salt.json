@@ -1,0 +1,16 @@
+{
+  "compiler": "solc 0.8.26",
+  "optimizer": false,
+  "evmVersion": "cancun",
+  "wallet": "0x6A41695dfF6a581390e115199Ef4322FC831B208",
+  "nonce": 0,
+  "hookDeployer": "0xd9165b4921e07f1f272f9692dd6b76ac2837be01",
+  "salt": "0x000000000000000000000000000000000000000000000000000000000000124c",
+  "hook": "0x8c7012f6c8696ac2549d9911a662a73a47f6da80",
+  "flags": "0x1A80",
+  "windowSeconds": 20,
+  "guardFee": 990000,
+  "openFee": 10000,
+  "initCodeHash": "0x7bb79bf01db55b025ee649bdfa7ad6605f4c4492cc9a9a0c1f6154add2eb8e9c",
+  "note": "Valid only if ILandHookDeployer is deployed from this wallet at nonce 0 with this exact source and compiler settings."
+}

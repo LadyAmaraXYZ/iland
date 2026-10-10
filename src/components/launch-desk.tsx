@@ -173,9 +173,9 @@ export function LaunchDesk() {
       `Displayed market cap: ${formatStrk(quote.mcapRaw)} STRK`,
       `Opening price: ${formatPrice(quote.mcapRaw)} STRK per token`,
       `Tick range: ${quote.tickLower} to ${quote.tickUpper}`,
-      "Fee: 10000 (1%)",
+      "Fee after 20 seconds: 10000 (1%). First 20 seconds: 990000 (99%).",
       "Tick spacing: 200",
-      "Hooks: not set. Do not launch publicly at the zero hook.",
+      "Hooks: written, not deployed. Do not launch publicly yet.",
     ];
     try {
       await navigator.clipboard.writeText(lines.join("\n"));
@@ -393,7 +393,7 @@ export function LaunchDesk() {
                   {Chart && series.length > 1 ? <Chart points={series} /> : <div className="h-56 rounded-sm border border-line" />}
                   <p className="text-sm text-pretty text-muted">
                     {double && !double.spend.capped
-                      ? `Doubling takes ${formatPercent(double.spend.raw, quote.mcapRaw)} of the displayed market cap in STRK that reaches the pool. On a wide range that sits near 41%. A short range costs more. The buyer line adds the 1% pool fee.`
+                      ? `Doubling takes ${formatPercent(double.spend.raw, quote.mcapRaw)} of the displayed market cap in STRK that reaches the pool. On a wide range that sits near 41%. A short range costs more. The buyer line adds the 1% fee charged after the first 20 seconds. During those 20 seconds the hook fee is 99%.`
                       : "This range is too short for a double. Price runs out of tokens before 2×."}
                   </p>
                 </>

@@ -52,7 +52,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 md:grid-cols-2 md:px-8">
           <p className="max-w-sm text-sm text-pretty text-muted">
             Every token here is paired only with STRK. The pictures on the board are not markets.
-            Launches stay closed until the hook is on.
+            Launches stay closed until the hook is deployed.
           </p>
           <dl className="grid gap-4 text-sm">
             <AddressRow label="STRK" value={STRK} href={STRK_URL} />

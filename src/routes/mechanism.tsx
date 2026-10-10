@@ -67,8 +67,9 @@ function Rules() {
 
         <Section title="What is still closed">
           <p>
-            There is no anti-snipe hook. Without one, the first block belongs to bots. The factory
-            source still passes the zero address as the hook. Do not open public launches that way.
+            The hook is written and not deployed. For 20 seconds after initialize the pool fee is
+            99%. Then it is 1%. During those 20 seconds only the locker may add liquidity, and
+            nobody may remove it. Do not open public launches until that hook is the one on the pool.
           </p>
           <p>
             There is no single transaction that buys with ETH. A buy would be ETH, then the
