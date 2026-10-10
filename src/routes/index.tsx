@@ -114,7 +114,7 @@ function Board() {
             All tokens
           </Link>
         </div>
-        <LiveGrinta />\n        <FactoryTokens />
+        <LiveGrinta />\n        <RobinhoodCABox />\n        <FactoryTokens />
       </section>
 
       <section className="mt-4">
@@ -193,6 +193,69 @@ function FactoryTokens() {
         </article>
       ))}
     </div>
+  );
+}
+
+
+function RobinhoodCABox() {
+  const [ca, setCa] = useState("");
+  const [saved, setSaved] = useState<string[]>([]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem("rh-cas");
+    if (raw) setSaved(JSON.parse(raw));
+  }, []);
+
+  function add() {
+    const clean = ca.trim();
+    if (!/^0x[a-fA-F0-9]{40}$/.test(clean)) return;
+    const next = [clean, ...saved.filter((x) => x.toLowerCase() !== clean.toLowerCase())];
+    setSaved(next);
+    localStorage.setItem("rh-cas", JSON.stringify(next));
+    setCa("");
+  }
+
+  return (
+    <section className="mt-4 rounded-lg border border-line bg-elevated p-4">
+      <p className="font-mono text-xs tracking-widest text-muted uppercase">Robinhood Chain CA</p>
+      <div className="mt-3 flex gap-2">
+        <input
+          value={ca}
+          onChange={(e) => setCa(e.target.value)}
+          placeholder="0x... (paste CA)"
+          className="flex-1 rounded-sm border border-line bg-surface px-3 py-2 font-mono text-sm"
+        />
+        <button
+          type="button"
+          onClick={add}
+          className="rounded-sm bg-accent px-4 text-sm font-medium text-accent-fg"
+        >
+          Add
+        </button>
+      </div>
+      <ul className="mt-3 grid gap-2">
+        {saved.map((addr) => (
+          <li key={addr} className="flex items-center justify-between gap-2 text-sm">
+            <a
+              href={`https://robin.etherscan.io/address/${addr}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono text-accent"
+            >
+              {addr.slice(0, 6)}…{addr.slice(-4)}
+            </a>
+            <a
+              href={`https://app.uniswap.org/explore/tokens/robinhood/${addr}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-muted"
+            >
+              Uniswap
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
