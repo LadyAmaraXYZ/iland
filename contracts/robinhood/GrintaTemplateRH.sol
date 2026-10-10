@@ -98,6 +98,18 @@ contract GrintaTemplateRH {
         emit Opened(lower, upper);
     }
 
+    
+    /// @dev Buy with ETH. Converts via WETH if needed. minOut protects slippage.
+    function buyWithEth(uint256 minOut) external payable returns (uint256 out) {
+        require(msg.value > 0, "amount");
+        require(opened, "not open");
+        // Simplified: for first version, just record intent.
+        // Full Uniswap path will be expanded.
+        out = msg.value; // placeholder
+        require(out >= minOut, "slippage");
+        // Real swap logic to be completed
+    }
+
     function transfer(address to, uint256 amount) external returns (bool) {
         balanceOf[msg.sender] -= amount;
         balanceOf[to] += amount;
