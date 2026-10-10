@@ -51,8 +51,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <div className="border-b border-line bg-elevated">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#0b1d36]">
-              <span className="font-display text-lg font-extrabold text-white">i</span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-md overflow-hidden">
+              <img src="/land/iland-logo.svg" alt="iLAND" className="h-full w-full object-cover" />
             </div>
             <div>
               <p className="font-display text-lg font-extrabold">iLAND</p>

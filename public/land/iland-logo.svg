@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#0b1d36"/>
+  <circle cx="100" cy="90" r="62" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.6"/>
+  <!-- i mark -->
+  <circle cx="100" cy="48" r="10" fill="#ffffff"/>
+  <path d="M88 68 L112 68 L108 130 L92 130 Z" fill="#ffffff"/>
+  <!-- land accent -->
+  <path d="M70 130 L130 130 L115 155 L85 155 Z" fill="#ff5a5f"/>
+  <path d="M85 130 L100 155 L70 155 Z" fill="#1e3a5f" opacity="0.8"/>
+</svg>
