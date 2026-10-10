@@ -11,12 +11,6 @@ const tabLink =
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-bg pb-16 text-fg md:pb-0">
-      <a
-        href="https://etherscan.io/token/0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766"
-        className="block bg-accent px-4 py-2 text-center font-mono text-xs tracking-wide text-accent-fg"
-      >
-        Public launches stay closed. The hook is deployed. Pair is STRK.
-      </a>
       <header className="sticky top-0 z-20 border-b border-line bg-bg/95 backdrop-blur-sm">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
           <Link to="/" className="font-display text-lg font-extrabold tracking-tight">
