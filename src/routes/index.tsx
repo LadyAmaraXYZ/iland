@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { atlas } from "@/lib/iland/atlas";
 
@@ -101,6 +102,17 @@ function Board() {
         </section>
       </div>
 
+
+      <section className="mt-8">
+        <div className="mb-3 flex items-end justify-between gap-3">
+          <h2 className="font-mono text-xs tracking-widest text-muted uppercase">Live launches</h2>
+          <Link to="/tokens" className="font-mono text-xs tracking-widest text-fg uppercase">
+            All tokens
+          </Link>
+        </div>
+        <LiveGrinta />
+      </section>
+
       <section className="mt-4">
         <div className="mb-3 flex items-end justify-between gap-3">
           <h2 className="font-mono text-xs tracking-widest text-muted uppercase">Atlas · pictures, not pools</h2>
@@ -126,3 +138,56 @@ function Board() {
     </SiteShell>
   );
 }
+
+
+function LiveGrinta() {
+  const [pair, setPair] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("https://api.dexscreener.com/latest/dex/tokens/0x7b5D1BB276952b2767Dac420A42b6c3326BF6A73")
+      .then((r) => r.json())
+      .then((data) => {
+        const p = data?.pairs?.find((x: any) => x.chainId === "ethereum" && x.dexId === "uniswap");
+        if (p) setPair(p);
+      })
+      .catch(() => {});
+  }, []);
+
+  return (
+    <article className="overflow-hidden rounded-lg border border-line bg-elevated">
+      <div className="grid gap-4 p-5 md:grid-cols-[120px_1fr_auto]">
+        <div className="flex items-center justify-center rounded-md bg-[#0b1d36] p-3">
+          <img src="/land/grinta.svg" alt="GRINTA" className="h-24 w-24 object-contain" />
+        </div>
+        <div className="grid gap-2">
+          <div className="flex items-baseline gap-3">
+            <h3 className="font-display text-2xl font-extrabold">GRINTA</h3>
+            <span className="font-mono text-xs text-accent">LIVE</span>
+          </div>
+          <p className="font-mono text-xs text-muted">0x7b5D1BB276952b2767Dac420A42b6c3326BF6A73</p>
+          <p className="text-sm text-muted">GRINTA / STRK · Uniswap v4</p>
+          {pair ? (
+            <div className="mt-1 flex flex-wrap gap-4 text-sm">
+              <span>${Number(pair.priceUsd || 0).toFixed(8)}</span>
+              <span className="text-muted">Vol ${ (pair.volume?.h24 || 0).toLocaleString() }</span>
+              <span className="text-muted">Liq ${ (pair.liquidity?.usd || 0).toLocaleString() }</span>
+            </div>
+          ) : (
+            <p className="text-sm text-muted">Loading…</p>
+          )}
+        </div>
+        <div className="flex items-center">
+          <a
+            href={pair?.url || "https://dexscreener.com/ethereum/0x7b5D1BB276952b2767Dac420A42b6c3326BF6A73"}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-10 items-center rounded-sm bg-accent px-4 text-sm font-medium text-accent-fg"
+          >
+            Trade
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
