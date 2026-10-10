@@ -47,6 +47,24 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </header>
+      {/* iLAND Robinhood Chain card — paste CA here when ready */}
+      <div className="border-b border-line bg-elevated">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#0b1d36]">
+              <span className="font-display text-lg font-extrabold text-white">i</span>
+            </div>
+            <div>
+              <p className="font-display text-lg font-extrabold">iLAND</p>
+              <p className="font-mono text-xs text-muted">Robinhood Chain · CA pending</p>
+            </div>
+          </div>
+          <div className="rounded-sm bg-[#00d084] px-3 py-1 font-mono text-xs font-bold text-black">
+            Public launch soon
+          </div>
+        </div>
+      </div>
+
       <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8">{children}</main>
       <footer className="border-t border-line">
         <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 md:grid-cols-2 md:px-6">
