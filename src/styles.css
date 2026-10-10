@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Newsreader", Georgia, "Iowan Old Style", serif;
-  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-display: "Archivo", "Arial Narrow", sans-serif;
+  --font-sans: "Manrope", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 
-  --color-bg: #0c0e0c;
-  --color-elevated: #141714;
-  --color-surface: #1c211c;
-  --color-fg: #efece4;
-  --color-muted: #9a968c;
-  --color-subtle: #8a877e;
-  --color-line: #2a2e2a;
-  --color-accent: #e08a45;
-  --color-accent-fg: #1a120c;
+  --color-bg: #0d0d0d;
+  --color-elevated: #141414;
+  --color-surface: #1a1a1a;
+  --color-fg: #fafafa;
+  --color-muted: #a3a3a3;
+  --color-subtle: #616161;
+  --color-line: #262626;
+  --color-accent: #c53400;
+  --color-accent-fg: #fffdf1;
 
   --radius-xs: 0.25rem;
   --radius-sm: 0.5rem;
@@ -71,6 +71,10 @@
   ::selection {
     background: var(--color-fg);
     color: var(--color-bg);
+  }
+
+  .hero-veil {
+    background: radial-gradient(ellipse at center, rgb(13 13 13 / 0.88) 0%, rgb(13 13 13 / 0.45) 62%, rgb(13 13 13 / 0.2) 100%);
   }
 
   input[type="checkbox"] {
