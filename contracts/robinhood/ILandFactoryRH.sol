@@ -1,33 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-/// @notice Minimal factory for Robinhood Chain. Deploys GRINTA-style tokens
-///         paired against a fixed quote token (wSTRK) at fixed opening tick.
+/// @notice Factory for Robinhood Chain. Quote token is wSTRK.
 contract ILandFactoryRH {
-    address public immutable quoteToken; // wSTRK
-    address public immutable poolManager;
-    address public immutable weth;
+    address public constant QUOTE = 0xD9165b4921E07f1F272F9692dD6B76aC2837BE01; // wSTRK
+    address public constant POOL_MANAGER = 0x8366a39cc670b4001a1121b8f6a443a643e40951;
+    address public constant WETH = 0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73;
 
     event Launched(address indexed token, address indexed creator, string name, string symbol);
 
     address[] public tokens;
 
-    constructor(address quoteToken_, address poolManager_, address weth_) {
-        quoteToken = quoteToken_;
-        poolManager = poolManager_;
-        weth = weth_;
+    function launch(string calldata name, string calldata symbol) external returns (address token) {
+        require(bytes(name).length >= 2 && bytes(name).length <= 32, "name");
+        require(bytes(symbol).length >= 1 && bytes(symbol).length <= 8, "symbol");
+
+        // TODO: deploy full GrintaTemplateRH once parameterized
+        // For now this records the intent
+        token = address(uint160(uint256(keccak256(abi.encodePacked(name, symbol, block.timestamp)))));
+        tokens.push(token);
+        emit Launched(token, msg.sender, name, symbol);
     }
 
-    function launch(string calldata name, string calldata symbol) external returns (address token) {
-        // For the first version we deploy a simple token and the creator
-        // can open the pool manually with the same logic as GRINTA.
-        // Full template deployment can be added once wSTRK is live.
-        require(bytes(name).length >= 2, "name");
-        require(bytes(symbol).length >= 1, "symbol");
-
-        // Placeholder: real deployment of GrintaTemplateRH comes next
-        // after we finalize the quote token address.
-        token = address(0);
-        emit Launched(token, msg.sender, name, symbol);
+    function launchCount() external view returns (uint256) {
+        return tokens.length;
     }
 }
