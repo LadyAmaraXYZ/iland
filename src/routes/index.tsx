@@ -1,64 +1,66 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LaunchDesk } from "@/components/launch-desk";
 import { SiteShell } from "@/components/site-shell";
-import { Button } from "@/components/ui/button";
+import { atlas } from "@/lib/iland/atlas";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [{ title: "iLAND — opening price desk" }],
+    meta: [{ title: "iLAND — board" }],
   }),
-  component: Home,
+  component: Board,
 });
 
-const facts = [
-  ["1,000,000,000", "Token supply"],
-  ["1%", "Swap fee"],
-  ["200", "Tick spacing"],
-  ["0", "STRK from the creator"],
-];
-
-function Home() {
+function Board() {
   return (
     <SiteShell>
-      <section className="grid gap-6 border-b border-line pb-8 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
-          <p className="text-sm font-medium text-muted">Ethereum launchpad</p>
-          <h1 className="mt-3 font-display text-hero">
-            The pool starts with tokens. STRK comes from buyers.
-          </h1>
-        </div>
-        <div className="lg:col-span-5">
-          <p className="text-pretty text-muted">
-            iLAND mints one billion tokens into a locker and places them in a one-sided Uniswap v4
-            range against STRK. Displayed market cap is the opening price times supply. It is not
-            STRK sitting in the pool.
-          </p>
-          <p className="mt-3 text-sm text-pretty text-muted">
-            Public launches are closed. The factory is not deployed, and the pool has no anti-snipe
-            hook. This desk only prepares the tick.
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <Button asChild variant="secondary">
-              <Link to="/mechanism">Read the rules</Link>
-            </Button>
-            <Link to="/place" className="inline-flex h-11 items-center text-sm text-fg underline-offset-4 hover:underline">
-              Where it sits
-            </Link>
+      <section className="overflow-hidden rounded-lg border border-line">
+        <div className="relative min-h-72">
+          <img src="/land/hero.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/55 to-bg/10" />
+          <div className="relative flex min-h-72 flex-col justify-end p-5 sm:p-8">
+            <p className="text-sm font-medium text-fg">Ethereum launchpad</p>
+            <h1 className="mt-2 max-w-xl font-display text-hero">Open a plot against STRK.</h1>
+            <p className="mt-3 max-w-lg text-pretty text-muted">
+              One billion tokens. One Uniswap v4 position. Buyers bring the STRK. Nothing on this
+              board has been launched.
+            </p>
           </div>
         </div>
       </section>
 
-      <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
-        {facts.map(([value, label]) => (
-          <div key={label} className="bg-bg px-4 py-4">
-            <dt className="font-display text-xl tabular-nums">{value}</dt>
-            <dd className="mt-1 text-sm text-muted">{label}</dd>
-          </div>
+      <ol className="mt-6 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+        {[
+          ["01", "Name the token", "Picture, ticker, a short note. It stays in this browser."],
+          ["02", "Set the opening", "The desk writes the tick. Displayed cap is not STRK in the pool."],
+          ["03", "Wait for the hook", "No public launch until the first block is protected."],
+        ].map(([n, title, body]) => (
+          <li key={n} className="bg-bg px-4 py-4">
+            <p className="font-mono text-sm text-accent">{n}</p>
+            <p className="mt-2 font-medium">{title}</p>
+            <p className="mt-1 text-sm text-pretty text-muted">{body}</p>
+          </li>
         ))}
-      </dl>
+      </ol>
 
-      <div className="mt-10">
-        <LaunchDesk />
+      <div className="mt-10 flex items-end justify-between gap-4">
+        <h2 className="font-display text-title">Atlas</h2>
+        <Link to="/create" className="text-sm text-fg underline-offset-4 hover:underline">
+          Prepare one
+        </Link>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {atlas.map((parcel) => (
+          <article key={parcel.symbol} className="overflow-hidden rounded-lg border border-line bg-elevated">
+            <img src={parcel.image} alt="" className="aspect-square w-full object-cover" />
+            <div className="grid gap-1 p-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <h3 className="font-display text-lg leading-tight">{parcel.name}</h3>
+                <span className="font-mono text-xs text-muted">{parcel.symbol}</span>
+              </div>
+              <p className="text-sm text-muted">STRK · {parcel.opening}</p>
+              <p className="text-sm text-accent">Not launched</p>
+            </div>
+          </article>
+        ))}
       </div>
     </SiteShell>
   );

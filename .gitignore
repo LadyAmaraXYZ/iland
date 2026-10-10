@@ -10,3 +10,5 @@ artifacts/
 dist/
 .output/
 .nitro/
+.vercel
+.env*

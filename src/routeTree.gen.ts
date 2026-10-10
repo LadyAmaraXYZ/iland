@@ -10,12 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CreateRouteImport } from './routes/create'
 import { Route as MechanismRouteImport } from './routes/mechanism'
 import { Route as PlaceRouteImport } from './routes/place'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as TokensRouteImport } from './routes/tokens'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateRoute = CreateRouteImport.update({
+  id: '/create',
+  path: '/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MechanismRoute = MechanismRouteImport.update({
@@ -28,35 +36,64 @@ const PlaceRoute = PlaceRouteImport.update({
   path: '/place',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TokensRoute = TokensRouteImport.update({
+  id: '/tokens',
+  path: '/tokens',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/create': typeof CreateRoute
   '/mechanism': typeof MechanismRoute
   '/place': typeof PlaceRoute
+  '/profile': typeof ProfileRoute
+  '/tokens': typeof TokensRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/create': typeof CreateRoute
   '/mechanism': typeof MechanismRoute
   '/place': typeof PlaceRoute
+  '/profile': typeof ProfileRoute
+  '/tokens': typeof TokensRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/create': typeof CreateRoute
   '/mechanism': typeof MechanismRoute
   '/place': typeof PlaceRoute
+  '/profile': typeof ProfileRoute
+  '/tokens': typeof TokensRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/mechanism' | '/place'
+  fullPaths: '/' | '/create' | '/mechanism' | '/place' | '/profile' | '/tokens'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/mechanism' | '/place'
-  id: '__root__' | '/' | '/mechanism' | '/place'
+  to: '/' | '/create' | '/mechanism' | '/place' | '/profile' | '/tokens'
+  id:
+    | '__root__'
+    | '/'
+    | '/create'
+    | '/mechanism'
+    | '/place'
+    | '/profile'
+    | '/tokens'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CreateRoute: typeof CreateRoute
   MechanismRoute: typeof MechanismRoute
   PlaceRoute: typeof PlaceRoute
+  ProfileRoute: typeof ProfileRoute
+  TokensRoute: typeof TokensRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create': {
+      id: '/create'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mechanism': {
@@ -82,13 +126,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tokens': {
+      id: '/tokens'
+      path: '/tokens'
+      fullPath: '/tokens'
+      preLoaderRoute: typeof TokensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CreateRoute: CreateRoute,
   MechanismRoute: MechanismRoute,
   PlaceRoute: PlaceRoute,
+  ProfileRoute: ProfileRoute,
+  TokensRoute: TokensRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
