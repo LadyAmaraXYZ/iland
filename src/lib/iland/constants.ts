@@ -17,3 +17,8 @@ export const POOL_MANAGER_URL = `https://etherscan.io/address/${POOL_MANAGER}`;
 
 export const FACTORY = "0x2970967dDd50Eb323e185F98148Ab396E21eae1E";
 export const FACTORY_URL = `https://etherscan.io/address/${FACTORY}`;
+
+export const RH_CHAIN_ID = 4663;
+export const RH_WSTRK = "0xD9165b4921E07f1F272F9692dD6B76aC2837BE01";
+export const RH_POOL_MANAGER = "0x8366a39cc670b4001a1121b8f6a443a643e40951";
+export const RH_WETH = "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73";
