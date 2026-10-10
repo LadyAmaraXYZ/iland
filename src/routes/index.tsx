@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createPublicClient, http } from "viem";
+import { mainnet } from "viem/chains";
+import { FACTORY } from "@/lib/iland/constants";
+import { factoryAbi, tokenAbi } from "@/lib/iland/abis";
 import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { atlas } from "@/lib/iland/atlas";
@@ -110,7 +114,7 @@ function Board() {
             All tokens
           </Link>
         </div>
-        <LiveGrinta />
+        <LiveGrinta />\n        <FactoryTokens />
       </section>
 
       <section className="mt-4">
@@ -139,6 +143,58 @@ function Board() {
   );
 }
 
+
+
+function FactoryTokens() {
+  const [tokens, setTokens] = useState<{address: string; name: string; symbol: string}[]>([]);
+
+  useEffect(() => {
+    const client = createPublicClient({ chain: mainnet, transport: http() });
+    (async () => {
+      try {
+        const count = await client.readContract({
+          address: FACTORY as `0x${string}`,
+          abi: factoryAbi,
+          functionName: "launchCount",
+        });
+        const list = [];
+        for (let i = 0; i < Number(count); i++) {
+          const addr = await client.readContract({
+            address: FACTORY as `0x${string}`,
+            abi: factoryAbi,
+            functionName: "tokenAt",
+            args: [BigInt(i)],
+          });
+          const [name, symbol] = await Promise.all([
+            client.readContract({ address: addr as `0x${string}`, abi: tokenAbi, functionName: "name" }),
+            client.readContract({ address: addr as `0x${string}`, abi: tokenAbi, functionName: "symbol" }),
+          ]);
+          list.push({ address: addr as string, name: name as string, symbol: symbol as string });
+        }
+        setTokens(list.reverse());
+      } catch {}
+    })();
+  }, []);
+
+  if (tokens.length === 0) return null;
+
+  return (
+    <div className="mt-4 grid gap-3">
+      {tokens.map((t) => (
+        <article key={t.address} className="rounded-lg border border-line bg-elevated p-4">
+          <div className="flex items-baseline justify-between">
+            <h3 className="font-display text-xl font-extrabold">{t.name}</h3>
+            <span className="font-mono text-xs text-accent">{t.symbol}</span>
+          </div>
+          <p className="mt-1 font-mono text-xs text-muted">{t.address}</p>
+          <a href={`https://dexscreener.com/ethereum/${t.address}`} target="_blank" className="mt-2 inline-block text-sm text-accent">
+            Trade
+          </a>
+        </article>
+      ))}
+    </div>
+  );
+}
 
 function LiveGrinta() {
   const [pair, setPair] = useState<any>(null);
