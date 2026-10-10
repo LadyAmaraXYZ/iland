@@ -46,9 +46,8 @@ function Tokens() {
       {/* Featured live GRINTA */}
       <section className="mt-8 overflow-hidden rounded-lg border border-line bg-elevated">
         <div className="grid gap-4 p-5 md:grid-cols-[160px_1fr]">
-          <div className="flex items-center justify-center rounded-md bg-[#0a1628] p-4">
-            <div className="text-6xl font-extrabold text-white">G</div>
-            {/* Replace with <img src="/land/grinta.jpg" alt="GRINTA" className="h-full w-full object-contain" /> once logo is uploaded */}
+          <div className="flex items-center justify-center rounded-md bg-[#0b1d36] p-4">
+            <img src="/land/grinta.svg" alt="GRINTA" className="h-32 w-32 object-contain" />
           </div>
           <div className="grid gap-3">
             <div className="flex items-baseline justify-between gap-2">

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <rect width="240" height="240" fill="#0b1d36"/>
+  <circle cx="120" cy="120" r="88" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 5" opacity="0.35"/>
+  <!-- Bold geometric G -->
+  <path d="M72 58 
+           C72 42, 88 32, 108 32 
+           L148 32 
+           L148 58 
+           L112 58 
+           C98 58, 88 68, 88 84 
+           L88 156 
+           L148 156 
+           L148 132 
+           L168 132 
+           L168 182 
+           L72 182 
+           Z" fill="#ffffff"/>
+  <path d="M148 92 L188 92 L188 128 L168 128 L148 108 Z" fill="#ff5a5f"/>
+  <polygon points="108,168 92,198 124,198" fill="#ff5a5f"/>
+</svg>
