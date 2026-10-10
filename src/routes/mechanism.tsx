@@ -67,13 +67,15 @@ function Rules() {
 
         <Section title="What is still closed">
           <p>
-            The hook is written and not deployed. For 20 seconds after initialize the pool fee is
-            99%. Then it is 1%. During those 20 seconds only the locker may add liquidity, and
-            nobody may remove it. Do not open public launches until that hook is the one on the pool.
+            The hook is deployed. For 20 seconds after initialize the pool fee is 99%. Then it is 1%.
+            During those 20 seconds only the locker may add liquidity, and nobody may remove it.
+            Public launches stay closed. The factory still accepts a launch only from its owner.
           </p>
           <p>
-            There is no single transaction that buys with ETH. A buy would be ETH, then the
-            existing STRK/ETH pool, then this v4 pool.
+            A buyer can pay with STRK and enter this pool directly. ETH, WETH, and USDC are not a second
+            pair. Each converts through an existing STRK pool first, then into this one. The factory
+            does not need to change for that. The hop is not a button on this site yet, so this page
+            still does not send a swap.
           </p>
           <p>
             The first launch has to be private. Confirm the pool holds the new token and zero STRK,

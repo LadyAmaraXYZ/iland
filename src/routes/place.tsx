@@ -92,8 +92,8 @@ function Place() {
             </p>
             <p>
               Clanker cuts the sniper with an auction of about 22 seconds. Stockereum holds the fee
-              at 99% for the first 20 seconds. iLAND uses that second window. The hook is written and
-              not deployed, so the pad stays closed.
+              at 99% for the first 20 seconds. iLAND uses that second window. The hook is deployed.
+              Public launches stay closed.
             </p>
             <p>
               On those two pads, part of the pool fee is paid to the creator. iLAND does not. The fee,
