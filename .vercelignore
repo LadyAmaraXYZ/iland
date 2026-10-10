@@ -1,0 +1,11 @@
+node_modules
+.git
+screenshots
+artifacts
+*.log
+.grok/references
+.grok/skills
+.grok/preview.log
+.grok/status
+.grok/*.jpg
+.grok/*.png

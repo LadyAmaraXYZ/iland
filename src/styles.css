@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Newsreader", Georgia, "Iowan Old Style", serif;
+  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-bg: #0c0e0c;
+  --color-elevated: #141714;
+  --color-surface: #1c211c;
+  --color-fg: #efece4;
+  --color-muted: #9a968c;
+  --color-subtle: #8a877e;
+  --color-line: #2a2e2a;
+  --color-accent: #efece4;
+  --color-accent-fg: #121411;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-card: 2rem;
+
+  --text-hero: clamp(2rem, 1.35rem + 2.4vw, 4.25rem);
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.03em;
+  --text-title: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.02em;
+  --text-stat: clamp(1.75rem, 1.4rem + 1.2vw, 2.75rem);
+  --text-stat--line-height: 1.05;
+  --text-stat--letter-spacing: -0.03em;
+
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-fg);
+    color: var(--color-bg);
+  }
+
+  input[type="checkbox"] {
+    accent-color: var(--color-fg);
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+.vercel/
+.env
+.env.*
+screenshots/
+artifacts/
+*.log
+.grok/*
+!.grok/app-env.json
+dist/
+.output/
+.nitro/
