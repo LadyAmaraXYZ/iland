@@ -14,3 +14,6 @@ export const POOL_MANAGER = "0x000000000004444c5dc75cB358380D2e3dE08A90";
 
 export const STRK_URL = `https://etherscan.io/token/${STRK}`;
 export const POOL_MANAGER_URL = `https://etherscan.io/address/${POOL_MANAGER}`;
+
+export const FACTORY = "0x2970967dDd50Eb323e185F98148Ab396E21eae1E";
+export const FACTORY_URL = `https://etherscan.io/address/${FACTORY}`;

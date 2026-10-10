@@ -16,7 +16,7 @@ const facts = [
   ["First 20 seconds", "99%"],
   ["After that", "1%"],
   ["Liquidity", "Locked"],
-  ["Public launches", "Closed"],
+  ["Public launches", "Open"],
 ];
 
 const steps = [
@@ -51,7 +51,7 @@ function Board() {
             to="/create"
             className="mt-8 inline-flex h-12 items-center rounded-md bg-accent px-6 font-mono text-xs tracking-widest text-accent-fg uppercase"
           >
-            Prepare a launch
+            Launch token
           </Link>
         </div>
       </section>

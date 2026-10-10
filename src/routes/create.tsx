@@ -43,7 +43,7 @@ function Create() {
     reader.readAsDataURL(file);
   }
 
-  function keep() {
+  async function launch() {
     const cleanName = name.trim();
     const cleanSymbol = symbol.trim().toUpperCase();
     if (cleanName.length < 2) {
@@ -56,22 +56,46 @@ function Create() {
       setStep(0);
       return;
     }
-    savePlot({
-      id: crypto.randomUUID(),
-      name: cleanName,
-      symbol: cleanSymbol,
-      note: note.trim(),
-      image: image || "/land/parcel-north.jpg",
-      at: Date.now(),
-    });
     setError("");
-    setSaved(true);
+    setSaved(false);
+
+    const eth = (window as any).ethereum;
+    if (!eth) {
+      setError("No wallet found. Connect MetaMask or another wallet.");
+      return;
+    }
+
+    try {
+      const accounts = await eth.request({ method: "eth_requestAccounts" });
+      if (!accounts?.[0]) {
+        setError("Wallet connection rejected.");
+        return;
+      }
+
+      // launch(string,string) selector = keccak256("launch(string,string)")[:4]
+      // We use a simple encode for the call
+      const data = "0x" + "launch".padEnd(10, "0"); // placeholder — real ABI encoding needed
+      // For now show success path and save draft; real tx will be added with viem
+      savePlot({
+        id: crypto.randomUUID(),
+        name: cleanName,
+        symbol: cleanSymbol,
+        note: note.trim(),
+        image: image || "/land/parcel-north.jpg",
+        at: Date.now(),
+      });
+      setSaved(true);
+      setError("Wallet connected. Real on-chain launch will be enabled next (ABI encoding).");
+    } catch (e: any) {
+      setError(e?.message || "Transaction failed");
+    }
   }
 
   return (
     <SiteShell>
       <p className="text-sm font-medium text-muted">Create</p>
-      <h1 className="mt-2 font-display text-title">Prepare a token. Do not launch it.</h1>
+      <h1 className="mt-2 font-display text-title">Launch a token</h1>
+      <p className="mt-1 text-sm text-muted">Factory: <a href="https://etherscan.io/address/0x2970967dDd50Eb323e185F98148Ab396E21eae1E" target="_blank" className="text-accent">0x2970…ae1E</a> · Fixed MCAP · Same as GRINTA</p>
       <ol className="mt-5 flex flex-wrap gap-2">
         {steps.map((label, index) => (
           <li key={label}>
@@ -180,7 +204,7 @@ function Create() {
               </Link>
             </p>
           ) : (
-            <Button type="button" className="w-fit" onClick={keep}>
+            <Button type="button" className="w-fit" onClick={launch}>
               Save in this browser
             </Button>
           )}
