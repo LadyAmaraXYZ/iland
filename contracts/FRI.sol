@@ -7,7 +7,8 @@ pragma solidity 0.8.26;
 ///         Website and the only social: https://iland.lol
 ///
 ///         Remix: solc 0.8.26, optimizer 200 runs, Cancun. No constructor arguments. Value 0.
-///         Wait 20 seconds after deploy. The first 20 seconds charge 99 percent.
+///         Then call open() once. Wait 20 seconds. The first 20 seconds charge 99 percent.
+///         The pool cannot be opened inside the constructor: the token code is not live yet.
 ///         Uses the already deployed iLAND hook. It does not call the factory.
 
 interface IERC20 {
@@ -215,10 +216,11 @@ contract FRI {
 
     FriLocker public immutable locker;
     address public immutable owner;
-    int24 public immutable tickLower;
-    int24 public immutable tickUpper;
+    int24 public tickLower;
+    int24 public tickUpper;
     uint256 public minTokensPerEth;
     uint256 private locked;
+    bool public opened;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
@@ -230,6 +232,7 @@ contract FRI {
     error NotManager();
     error NotAllowed();
     error TransferFailed();
+    error NotOpen();
 
     modifier onlyOwner() {
         if (msg.sender != owner) revert NotAllowed();
@@ -242,7 +245,12 @@ contract FRI {
         locker = new FriLocker(POOL_MANAGER, STRK);
         balanceOf[address(locker)] = totalSupply;
         emit Transfer(address(0), address(locker), totalSupply);
+    }
 
+    /// @dev Call once, after deploy. The token code has to exist before it can be paid into the pool.
+    function open() external onlyOwner {
+        if (opened) revert NotAllowed();
+        opened = true;
         bool tokenIs0 = address(this) < STRK;
         int24 boundary = tokenIs0 ? OPEN_TICK : -OPEN_TICK;
         int24 lower = tokenIs0 ? boundary : MIN_TICK;
@@ -263,12 +271,14 @@ contract FRI {
 
     /// @dev A normal ETH transfer. No function arguments.
     receive() external payable {
+        if (!opened) revert NotOpen();
         if (msg.value == 0) revert Amount();
         _buy(msg.sender, msg.value, true);
     }
 
     /// @dev WETH must be approved to this contract first. Do not attach ETH.
     function buyWeth(uint256 amount) external {
+        if (!opened) revert NotOpen();
         if (amount == 0) revert Amount();
         _pull(WETH, msg.sender, amount);
         _buy(msg.sender, amount, false);
