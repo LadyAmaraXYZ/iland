@@ -397,13 +397,13 @@ contract GRINTA {
     /// @param up True when the swap pushes the sqrt price up.
     function _capped(uint160 sqrt, bool up) internal pure returns (uint160) {
         if (up) {
-            uint256 next = uint256(sqrt) * CAP_NUM / CAP_DEN;
-            if (next >= MAX_SQRT) return MAX_SQRT;
-            return uint160(next);
+            uint256 nextPrice = uint256(sqrt) * CAP_NUM / CAP_DEN;
+            if (nextPrice >= MAX_SQRT) return MAX_SQRT;
+            return uint160(nextPrice);
         }
-        uint256 next = uint256(sqrt) * CAP_DEN / CAP_NUM;
-        if (next <= MIN_SQRT) return MIN_SQRT;
-        return uint160(next);
+        uint256 nextPrice = uint256(sqrt) * CAP_DEN / CAP_NUM;
+        if (nextPrice <= MIN_SQRT) return MIN_SQRT;
+        return uint160(nextPrice);
     }
 
     function _settleOrTake(address currency, int128 amount, address recipient) internal {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import "./GrintaTemplate.sol";
+import "GrintaTemplate.sol";
 
 /// @notice Factory that deploys GRINTA-style tokens.
 ///         Each token starts at fixed MCAP (OPEN_TICK = -85400).
