@@ -50,7 +50,14 @@ export function SiteShell({ children }: { children: ReactNode }) {
             </div>
             <div>
               <p className="font-display text-lg font-extrabold">iLAND</p>
-              <p className="font-mono text-xs text-muted">Robinhood Chain · CA pending</p>
+              <a
+                href="https://robin.etherscan.io/address/0x37705fd86734914387c6eb0a74dbd1b983f81e18"
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-xs text-accent"
+              >
+                0x37705fd86734914387c6eb0a74dbd1b983f81e18
+              </a>
             </div>
           </div>
           <div className="rounded-sm bg-[#00d084] px-3 py-1 font-mono text-xs font-bold text-black">
