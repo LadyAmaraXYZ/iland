@@ -192,7 +192,7 @@ contract GrintaLocker {
     }
 }
 
-contract GRINTA {
+contract GrintaTemplate {
     string public name;
     string public symbol;
     string public constant description =
@@ -399,13 +399,13 @@ contract GRINTA {
     /// @param up True when the swap pushes the sqrt price up.
     function _capped(uint160 sqrt, bool up) internal pure returns (uint160) {
         if (up) {
-            uint256 nextPrice = uint256(sqrt) * CAP_NUM / CAP_DEN;
-            if (nextPrice >= MAX_SQRT) return MAX_SQRT;
-            return uint160(nextPrice);
+            uint256 capped = uint256(sqrt) * CAP_NUM / CAP_DEN;
+            if (capped >= MAX_SQRT) return MAX_SQRT;
+            return uint160(capped);
         }
-        uint256 nextPrice = uint256(sqrt) * CAP_DEN / CAP_NUM;
-        if (nextPrice <= MIN_SQRT) return MIN_SQRT;
-        return uint160(nextPrice);
+        uint256 capped = uint256(sqrt) * CAP_DEN / CAP_NUM;
+        if (capped <= MIN_SQRT) return MIN_SQRT;
+        return uint160(capped);
     }
 
     function _settleOrTake(address currency, int128 amount, address recipient) internal {
